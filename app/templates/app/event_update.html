@@ -265,6 +265,11 @@
                             <option value="cancelled" {% if event.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="poster_url">Poster URL</label>
+                        <input type="url" id="poster_url" name="poster_url" value="{{ event.poster_url }}" placeholder="Enter poster image URL">
+                    </div>
                     
                     <div class="form-buttons">
                         <button type="submit" class="btn btn-primary">Update Event</button>

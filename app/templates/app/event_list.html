@@ -254,11 +254,13 @@
                         <td><span class="badge status-{{ event.status }}">{{ event.get_status_display }}</span></td>
                         <td>
                             <a href="{% url 'event_detail' event.slug %}" class="btn-sm btn-view">View</a>
-                            <a href="{% url 'event_update' event.id %}" class="btn-sm btn-edit">Edit</a>
-                            <form method="POST" action="{% url 'event_delete' event.id %}" style="display: inline;" onsubmit="return confirm('Delete this event?');">
+                            {% if event.status != 'completed' %}
+                            <a href="{% url 'event_update' event.slug %}" class="btn-sm btn-edit">Edit</a>
+                            <form method="POST" action="{% url 'event_delete' event.slug %}" style="display: inline;" onsubmit="return confirm('Delete this event?');">
                                 {% csrf_token %}
                                 <button type="submit" class="btn-sm btn-delete">Delete</button>
                             </form>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

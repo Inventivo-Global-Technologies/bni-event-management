@@ -1,0 +1,253 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Registration Successful - BNI Event Management{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .success-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: bounce 0.6s ease-in-out;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .success-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #28a745;
+        margin-bottom: 15px;
+    }
+
+    .success-message {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.8;
+    }
+
+    .hash-code-box {
+        background: #f8f9fa;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 30px 0;
+    }
+
+    .hash-code-label {
+        font-size: 12px;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .hash-code-value {
+        font-size: 28px;
+        font-weight: bold;
+        color: #667eea;
+        letter-spacing: 2px;
+        font-family: monospace;
+    }
+
+    .registration-info {
+        background: #e7f3ff;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+        border-radius: 5px;
+    }
+
+    .registration-info-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .registration-info-item {
+        font-size: 14px;
+        color: #555;
+        margin: 8px 0;
+        padding-left: 20px;
+    }
+
+    .registration-info-item strong {
+        color: #333;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #333;
+        border: 2px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+        background: #e0e0e0;
+    }
+
+    .email-note {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px 0;
+        font-size: 14px;
+    }
+
+    .email-note strong {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .success-container {
+            margin: 30px 20px;
+            padding: 25px;
+        }
+
+        .success-title {
+            font-size: 24px;
+        }
+
+        .hash-code-value {
+            font-size: 20px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="success-container">
+    <div class="success-icon">✅</div>
+    
+    <div class="success-title">Registration Successful!</div>
+    
+    <div class="success-message">
+        Thank you for registering for <strong>{{ event.title }}</strong>!<br>
+        Your registration has been confirmed. Please save your unique hash code for event check-in.
+    </div>
+
+    <!-- Hash Code -->
+    <div class="hash-code-box">
+        <div class="hash-code-label">Your Event Hash Code</div>
+        <div class="hash-code-value">{{ attendee.registration_hash }}</div>
+    </div>
+
+    <!-- Email Notification -->
+    <div class="email-note">
+        <strong>📧 Confirmation Email Sent!</strong>
+        A confirmation email with your hash code has been sent to <strong>{{ attendee.email }}</strong>
+    </div>
+
+    <!-- Registration Details -->
+    <div class="registration-info">
+        <div class="registration-info-title">📋 Your Registration Details</div>
+        <div class="registration-info-item">
+            <strong>Name:</strong> {{ attendee.full_name }}
+        </div>
+        <div class="registration-info-item">
+            <strong>Email:</strong> {{ attendee.email }}
+        </div>
+        {% if attendee.phone %}
+        <div class="registration-info-item">
+            <strong>Phone:</strong> {{ attendee.phone }}
+        </div>
+        {% endif %}
+        {% if attendee.company_name %}
+        <div class="registration-info-item">
+            <strong>Company:</strong> {{ attendee.company_name }}
+        </div>
+        {% endif %}
+        <div class="registration-info-item">
+            <strong>Registration Type:</strong> {{ attendee.get_registration_type_display }}
+        </div>
+    </div>
+
+    <!-- Event Details -->
+    <div class="registration-info" style="background: #f0f8ff; border-color: #28a745;">
+        <div class="registration-info-title">🎯 Event Details</div>
+        <div class="registration-info-item">
+            <strong>Event Title:</strong> {{ event.title }}
+        </div>
+        <div class="registration-info-item">
+            <strong>Date:</strong> {{ event.start_date|date:"F d, Y" }}
+        </div>
+        <div class="registration-info-item">
+            <strong>Time:</strong> {{ event.start_date|date:"h:i A" }} - {{ event.end_date|date:"h:i A" }}
+        </div>
+        <div class="registration-info-item">
+            <strong>Location:</strong> {{ event.location }}
+        </div>
+    </div>
+
+    <div style="background: #ffe0e0; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; border-radius: 5px; text-align: left;">
+        <div style="font-weight: 600; color: #721c24; margin-bottom: 8px;">⚠️ Important for Check-in</div>
+        <div style="color: #721c24; font-size: 14px;">
+            Please bring your hash code <strong style="font-family: monospace; font-size: 16px;">{{ attendee.registration_hash }}</strong> or this confirmation email to the event for smooth check-in.
+        </div>
+    </div>
+
+    <div class="button-group">
+        <a href="{% url 'public_events' %}" class="btn btn-primary">View More Events</a>
+        <a href="{% url 'public_event_detail' event.slug %}" class="btn btn-secondary">Back to Event</a>
+    </div>
+</div>
+
+{% endblock %}

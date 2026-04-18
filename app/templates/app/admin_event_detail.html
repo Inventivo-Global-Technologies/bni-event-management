@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - Admin - BNI Event Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .user-info {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .event-header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .event-header-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .event-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .event-info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .event-info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .event-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-bottom: 15px;
+        }
+
+        .badge-upcoming {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .badge-ongoing {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .badge-completed {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .badge-cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .attendees-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .attendees-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .attendees-count {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .attendees-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .attendees-table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .attendees-table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .attendees-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .attendees-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .no-attendees {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-right {
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            .event-header-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .attendees-table {
+                font-size: 13px;
+            }
+
+            .attendees-table th,
+            .attendees-table td {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <h1>🎯 BNI Event Management</h1>
+                <p>Admin Dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">Welcome, <strong>{{ user.username }}</strong></div>
+                <a href="{% url 'admin_logout' %}" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to Dashboard</a>
+
+        <!-- Event Details -->
+        <div class="event-header">
+            <div class="event-title">{{ event.title }}</div>
+            <span class="badge badge-{{ event.status }}">{{ event.get_status_display }}</span>
+
+            <div class="event-description">{{ event.description }}</div>
+
+            <div class="event-header-grid">
+                <div class="event-info">
+                    <div class="event-info-label">Location</div>
+                    <div class="event-info-value">{{ event.location }}</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-info-label">Start Date</div>
+                    <div class="event-info-value">{{ event.start_date|date:"M d, Y H:i" }}</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-info-label">End Date</div>
+                    <div class="event-info-value">{{ event.end_date|date:"M d, Y H:i" }}</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-info-label">Capacity</div>
+                    <div class="event-info-value">{{ event.capacity }} Seats</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-info-label">Registered</div>
+                    <div class="event-info-value">{{ event.registered_count }}/{{ event.capacity }}</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-info-label">Available</div>
+                    <div class="event-info-value">{{ remaining_capacity }} Seats</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{% url 'event_update' event.slug %}" class="btn-primary">Edit Event</a>
+                <a href="{% url 'admin_dashboard' %}" class="btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Attendees Management -->
+        <div class="section-title">👥 Event Attendees</div>
+
+        <div class="attendees-container">
+            <div class="attendees-header">
+                <div class="attendees-count">
+                    Total Attendees: <strong>{{ attendees|length }}</strong> / {{ event.capacity }}
+                </div>
+            </div>
+
+            {% if attendees %}
+                <table class="attendees-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Registered Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendee in attendees %}
+                            <tr>
+                                <td>{{ attendee.name }}</td>
+                                <td>{{ attendee.email }}</td>
+                                <td>{{ attendee.phone }}</td>
+                                <td>{{ attendee.registered_at|date:"M d, Y H:i" }}</td>
+                                <td>
+                                    {% if event.status != 'completed' %}
+                                        <form method="POST" action="{% url 'remove_attendee' event.slug attendee.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-remove" onclick="return confirm('Are you sure you want to remove this attendee?');">Remove</button>
+                                        </form>
+                                    {% else %}
+                                        <span style="color: #999; font-size: 12px;">Event Completed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-attendees">
+                    <div style="font-size: 48px; margin-bottom: 15px;">👥</div>
+                    <p>No attendees registered yet for this event.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
